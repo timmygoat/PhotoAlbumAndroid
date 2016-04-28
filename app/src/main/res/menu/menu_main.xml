@@ -11,5 +11,5 @@
         android:id="@+id/action_create_album"
         android:orderInCategory="200"
         android:title="@string/action_create_album"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 </menu>

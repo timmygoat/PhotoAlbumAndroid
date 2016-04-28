@@ -12,15 +12,61 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private String m_Text = "";
+    User user = new User();
+
+    String[] albums = new String[] {
+            "Stuff", "Ish"
+    };
+    int[] flags = new int[]{
+            R.drawable.image1,
+            //here you have to give image name which you already pasted it in /res/drawable-hdpi/
+            R.drawable.image2,
+    };
+    String[] caption = new String[]{
+            "Some stuff",
+            "Some ish",
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+
+        for(int i=0;i<2;i++){
+            HashMap<String, String> hm = new HashMap<String,String>();
+            hm.put("album",  albums[i]);
+            hm.put("cap", caption[i]);
+            hm.put("flag", Integer.toString(flags[i]) );
+            aList.add(hm);
+        }
+
+        // Keys used in Hashmap
+        String[] from = { "flag","album","cap" };
+
+        // Ids of views in listview_layout
+        int[] to = { R.id.flag,R.id.album,R.id.cap};
+
+        // Instantiating an adapter to store each items
+        // R.layout.listview_layout defines the layout of each item
+        SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList,R.layout.listview_layout, from, to);
+
+        // Getting a reference to listview of main.xml layout file
+        ListView listView = ( ListView ) findViewById(R.id.listview);
+
+        // Setting the adapter to the listView
+        listView.setAdapter(adapter);
     }
 
     @Override
@@ -64,6 +110,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 m_Text = input.getText().toString();
+                Album a = new Album(m_Text);
+                user.addAlbum(a);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
