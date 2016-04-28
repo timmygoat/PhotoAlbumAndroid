@@ -21,20 +21,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private String m_Text = "";
-    User user = new User();
+    HashMap<String, String> hm = new HashMap<String,String>();
 
-    String[] albums = new String[] {
-            "Stuff", "Ish"
-    };
-    int[] flags = new int[]{
-            R.drawable.image1,
-            //here you have to give image name which you already pasted it in /res/drawable-hdpi/
-            R.drawable.image2,
-    };
-    String[] caption = new String[]{
-            "Some stuff",
-            "Some ish",
-    };
+    User user = new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +33,18 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
 
-        for(int i=0;i<2;i++){
+        for(int i=0;i<user.albums.size();i++){
             HashMap<String, String> hm = new HashMap<String,String>();
-            hm.put("album",  albums[i]);
-            hm.put("cap", caption[i]);
-            hm.put("flag", Integer.toString(flags[i]) );
+            hm.put("album_name",user.albums.get(i).getName());
+            hm.put("thumbnail",Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
             aList.add(hm);
         }
 
         // Keys used in Hashmap
-        String[] from = { "flag","album","cap" };
+        String[] from = {"album_name", "thumbnail"};
 
         // Ids of views in listview_layout
-        int[] to = { R.id.flag,R.id.album,R.id.cap};
+        int[] to = {R.id.album_name, R.id.thumbnail};
 
         // Instantiating an adapter to store each items
         // R.layout.listview_layout defines the layout of each item
@@ -112,6 +100,30 @@ public class MainActivity extends AppCompatActivity {
                 m_Text = input.getText().toString();
                 Album a = new Album(m_Text);
                 user.addAlbum(a);
+                List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+
+                for(int i=0;i<user.albums.size();i++){
+                    HashMap<String, String> hm = new HashMap<String,String>();
+                    hm.put("album_name",user.albums.get(i).getName());
+                    hm.put("thumbnail",Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
+                    aList.add(hm);
+                }
+
+                // Keys used in Hashmap
+                String[] from = {"album_name", "thumbnail"};
+
+                // Ids of views in listview_layout
+                int[] to = {R.id.album_name, R.id.thumbnail};
+
+                // Instantiating an adapter to store each items
+                // R.layout.listview_layout defines the layout of each item
+                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList,R.layout.listview_layout, from, to);
+
+                // Getting a reference to listview of main.xml layout file
+                ListView listView = ( ListView ) findViewById(R.id.listview);
+
+                // Setting the adapter to the listView
+                listView.setAdapter(adapter);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

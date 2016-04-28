@@ -7,6 +7,8 @@ package com.example.tgoetjen.photoalbum;
  * @author Tim Goetjen
  * @author Kinh Hoang
  */
+        import android.media.Image;
+
         import java.io.File;
         import java.io.IOException;
         import java.io.ObjectInputStream;
@@ -34,7 +36,7 @@ public class Picture implements Comparable<Picture>, Serializable{
     Calendar date;
     String caption;
     String URL;
-
+    Image pic;
     /*
      * Constructor for picture oibject
      * @param n name
@@ -55,6 +57,9 @@ public class Picture implements Comparable<Picture>, Serializable{
         this.URL = URL;
     }
 
+    public Image getImage(){
+        return pic;
+    }
     /*
      * Utilizes pictures names for comparison
      * @see java.lang.Comparable#compareTo(java.lang.Object)
