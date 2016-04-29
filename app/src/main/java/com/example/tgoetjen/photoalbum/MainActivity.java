@@ -85,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
             // Setting the adapter to the listView
             listView.setAdapter(adapter);
         }
-        TextView text = (TextView)findViewById(R.id.footer);
-        text.setText(String.format("Selected %s for item %s", menuItemName, listItemName));
         return true;
     }
 

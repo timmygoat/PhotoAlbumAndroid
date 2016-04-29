@@ -90,14 +90,6 @@ public class Album implements Comparable<Album>, Serializable{
      * @param p picture to add to album
      */
     public void addPicture(Picture p){
-        if(numPhotos==0){
-            oldDate = p.getCal();
-            newDate = p.getCal();
-        }
-        else{
-            if(p.getCal().compareTo(oldDate)<0) oldDate = p.getCal();
-            if(p.getCal().compareTo(newDate)>0) newDate = p.getCal();
-        }
         photos.add(p);
         this.numPhotos++;
     }

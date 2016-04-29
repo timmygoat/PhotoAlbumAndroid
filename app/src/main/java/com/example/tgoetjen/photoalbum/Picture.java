@@ -42,7 +42,7 @@ public class Picture implements Comparable<Picture>, Serializable{
      * @param caption caption
      * @param URL URL
      */
-    public Picture(String n, String caption, String URL){
+    public Picture(String n, String caption){
 //            throws URISyntaxException, IllegalArgumentException{
         this.name = n;
         this.caption = caption;
@@ -55,6 +55,8 @@ public class Picture implements Comparable<Picture>, Serializable{
         date.set(Calendar.HOUR,0);
         date.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
     }
+
+    public Picture(){}
 
     public Image getImage(){
         return pic;

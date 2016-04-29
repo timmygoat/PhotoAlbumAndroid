@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -28,6 +31,7 @@ public class ShowPhotos extends AppCompatActivity {
     private ShowPhotos getApp(){
         return this;
     }
+    SimpleAdapter adapter;
     User user = new User();
     int currentAlbum = -1;
 
@@ -57,7 +61,7 @@ public class ShowPhotos extends AppCompatActivity {
 
         // Instantiating an adapter to store each items
         // R.layout.listview_layout defines the layout of each item
-        SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList, R.layout.listview_layout, from, to);
+        adapter = new SimpleAdapter(this, aList, R.layout.listview_layout, from, to);
 
         // Getting a reference to listview of main.xml layout file
         ListView listView = (ListView) findViewById(R.id.photo_listview);
@@ -88,139 +92,60 @@ public class ShowPhotos extends AppCompatActivity {
         }
     }
     public void showAddPhoto(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter new photo name:");
+        final Picture p = new Picture();
+        user = ((PhotoAlbumApplication)getApplication()).getUser();
+        currentAlbum = ((PhotoAlbumApplication)getApplication()).getCurrentAlbum();
+        LayoutInflater factory = LayoutInflater.from(this);
 
-// Set up the input
-        final EditText name = new EditText(this);
-        final EditText caption = new EditText(this);
-// Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        name.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        caption.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+//text_entry is an Layout XML file containing two text field to display in alert dialog
+        final View textEntryView = factory.inflate(R.layout.text_entry,null);
 
-        builder.setView(name);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        final EditText name = (EditText)textEntryView.findViewById(R.id.EditText1);
+        final EditText caption = (EditText)textEntryView.findViewById(R.id.EditText2);
+
+        name.setHint("Enter name:");
+        caption.setHint("Enter caption:");
+
+        final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Enter photo information:");
+        alert.setView(textEntryView);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String c = caption.getText().toString();
                 String n = name.getText().toString();
-                Album a = new Album(n);
-                user.addAlbum(a);
+                p.caption = c;
+                p.name = n;
+                user.albums.get(currentAlbum).addPicture(p);
                 List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
 
-                for (int i = 0; i < user.albums.size(); i++) {
+                for (int i = 0; i < user.albums.get(currentAlbum).photos.size(); i++) {
                     HashMap<String, String> hm = new HashMap<String, String>();
-                    hm.put("album_name", user.albums.get(i).getName());
+                    hm.put("photo_name", user.albums.get(currentAlbum).photos.get(i).getName());
                     hm.put("thumbnail", Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
                     aList.add(hm);
                 }
 
                 // Keys used in Hashmap
-                String[] from = {"album_name", "thumbnail"};
+                String[] from = {"photo_name", "thumbnail"};
 
                 // Ids of views in listview_layout
                 int[] to = {R.id.name, R.id.thumbnail};
 
                 // Instantiating an adapter to store each items
                 // R.layout.listview_layout defines the layout of each item
-                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList, R.layout.listview_layout, from, to);
+                adapter = new SimpleAdapter(getApp(), aList, R.layout.listview_layout, from, to);
 
                 // Getting a reference to listview of main.xml layout file
-                ListView listView = (ListView) findViewById(R.id.listview);
+                ListView listView = (ListView) findViewById(R.id.photo_listview);
 
                 // Setting the adapter to the listView
                 listView.setAdapter(adapter);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
-
-        builder.setTitle("Enter caption:");
-        builder.setView(caption);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String n = name.getText().toString();
-                Album a = new Album(n);
-                user.addAlbum(a);
-                List<HashMap<String, String>> aList = new ArrayList<HashMap<String, String>>();
-
-                for (int i = 0; i < user.albums.size(); i++) {
-                    HashMap<String, String> hm = new HashMap<String, String>();
-                    hm.put("album_name", user.albums.get(i).getName());
-                    hm.put("thumbnail", Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
-                    aList.add(hm);
                 }
-
-                // Keys used in Hashmap
-                String[] from = {"album_name", "thumbnail"};
-
-                // Ids of views in listview_layout
-                int[] to = {R.id.name, R.id.thumbnail};
-
-                // Instantiating an adapter to store each items
-                // R.layout.listview_layout defines the layout of each item
-                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList, R.layout.listview_layout, from, to);
-
-                // Getting a reference to listview of main.xml layout file
-                ListView listView = (ListView) findViewById(R.id.listview);
-
-                // Setting the adapter to the listView
-                listView.setAdapter(adapter);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-// Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String n = name.getText().toString();
-                Album a = new Album(n);
-                user.addAlbum(a);
-                List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
-
-                for(int i=0;i<user.albums.size();i++){
-                    HashMap<String, String> hm = new HashMap<String,String>();
-                    hm.put("album_name",user.albums.get(i).getName());
-                    hm.put("thumbnail",Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
-                    aList.add(hm);
-                }
-
-                // Keys used in Hashmap
-                String[] from = {"album_name", "thumbnail"};
-
-                // Ids of views in listview_layout
-                int[] to = {R.id.name, R.id.thumbnail};
-
-                // Instantiating an adapter to store each items
-                // R.layout.listview_layout defines the layout of each item
-                SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList,R.layout.listview_layout, from, to);
-
-                // Getting a reference to listview of main.xml layout file
-                ListView listView = ( ListView ) findViewById(R.id.listview);
-
-                // Setting the adapter to the listView
-                listView.setAdapter(adapter);
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+            });
+             alert.setNegativeButton("Cancel",
+             new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int whichButton) {dialog.cancel();}});
+             alert.show();
     }
 }
