@@ -58,14 +58,38 @@ public class MainActivity extends AppCompatActivity {
         if(menuItemName.equals("Rename Album")){
             showRenameAlbum(info.position);
         }
+        else if(menuItemName.equals("Delete Album")){
+            user.removeAlbum(user.albums.get(info.position));
+            List<HashMap<String,String>> aList = new ArrayList<HashMap<String,String>>();
+
+            for(int i=0;i<user.albums.size();i++){
+                HashMap<String, String> hm = new HashMap<String,String>();
+                hm.put("album_name",user.albums.get(i).getName());
+                hm.put("thumbnail",Integer.toString(R.drawable.image1)); //actual image to be grabbed when we figure out image class in android
+                aList.add(hm);
+            }
+
+            // Keys used in Hashmap
+            String[] from = {"album_name", "thumbnail"};
+
+            // Ids of views in listview_layout
+            int[] to = {R.id.name, R.id.thumbnail};
+
+            // Instantiating an adapter to store each items
+            // R.layout.listview_layout defines the layout of each item
+            SimpleAdapter adapter = new SimpleAdapter(getBaseContext(), aList,R.layout.listview_layout, from, to);
+
+            // Getting a reference to listview of main.xml layout file
+            ListView listView = ( ListView ) findViewById(R.id.listview);
+
+            // Setting the adapter to the listView
+            listView.setAdapter(adapter);
+        }
         TextView text = (TextView)findViewById(R.id.footer);
         text.setText(String.format("Selected %s for item %s", menuItemName, listItemName));
         return true;
     }
 
-    public void showAlbumOptions(){
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
                 new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        showAlbumOptions();
                         return true;
                     }
                 });

@@ -35,7 +35,6 @@ public class Picture implements Comparable<Picture>, Serializable{
     ArrayList<Tag> tags = new ArrayList<Tag>();
     Calendar date;
     String caption;
-    String URL;
     Image pic;
     /*
      * Constructor for picture oibject
@@ -55,7 +54,6 @@ public class Picture implements Comparable<Picture>, Serializable{
         date.set(Calendar.SECOND,0);
         date.set(Calendar.HOUR,0);
         date.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
-        this.URL = URL;
     }
 
     public Image getImage(){
@@ -67,14 +65,6 @@ public class Picture implements Comparable<Picture>, Serializable{
      */
     public int compareTo(Picture p) {
         return this.name.toLowerCase().compareTo(p.name.toLowerCase());
-    }
-
-    /*
-     * Getter for URL string
-     * @return URL as String
-     */
-    public String getURL(){
-        return URL;
     }
 
     /*
