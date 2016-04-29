@@ -7,6 +7,8 @@ package com.example.tgoetjen.photoalbum;
  * @author Tim Goetjen
  * @author Kinh Hoang
  */
+        import android.media.Image;
+
         import java.io.File;
         import java.io.IOException;
         import java.io.ObjectInputStream;
@@ -33,42 +35,38 @@ public class Picture implements Comparable<Picture>, Serializable{
     ArrayList<Tag> tags = new ArrayList<Tag>();
     Calendar date;
     String caption;
-    String URL;
-
+    Image pic;
     /*
      * Constructor for picture oibject
      * @param n name
      * @param caption caption
      * @param URL URL
      */
-    public Picture(String n, String caption, String URL) throws URISyntaxException, IllegalArgumentException{
+    public Picture(String n, String caption){
+//            throws URISyntaxException, IllegalArgumentException{
         this.name = n;
         this.caption = caption;
         this.date = Calendar.getInstance();
-        File fp = new File(new URI(URL));
-        date.setTimeInMillis(fp.lastModified());
+//        File fp = new File(new URI(URL));
+//        date.setTimeInMillis(fp.lastModified());
         date.set(Calendar.MILLISECOND, 0);
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND,0);
         date.set(Calendar.HOUR,0);
         date.set(Calendar.MONTH, date.get(Calendar.MONTH) + 1);
-        this.URL = URL;
     }
 
+    public Picture(){}
+
+    public Image getImage(){
+        return pic;
+    }
     /*
      * Utilizes pictures names for comparison
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
     public int compareTo(Picture p) {
         return this.name.toLowerCase().compareTo(p.name.toLowerCase());
-    }
-
-    /*
-     * Getter for URL string
-     * @return URL as String
-     */
-    public String getURL(){
-        return URL;
     }
 
     /*

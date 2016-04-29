@@ -5,6 +5,8 @@ package com.example.tgoetjen.photoalbum; /**
  * @author Tim Goetjen
  * @author Kinh Hoang
  */
+import android.media.Image;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -48,6 +50,9 @@ public class Album implements Comparable<Album>, Serializable{
         return name;
     }
 
+    public Image getThumbnail(){
+        return photos.get(0).getImage();
+    }
     /*
      * Setter for name field
      * @param name to set as
@@ -85,14 +90,6 @@ public class Album implements Comparable<Album>, Serializable{
      * @param p picture to add to album
      */
     public void addPicture(Picture p){
-        if(numPhotos==0){
-            oldDate = p.getCal();
-            newDate = p.getCal();
-        }
-        else{
-            if(p.getCal().compareTo(oldDate)<0) oldDate = p.getCal();
-            if(p.getCal().compareTo(newDate)>0) newDate = p.getCal();
-        }
         photos.add(p);
         this.numPhotos++;
     }

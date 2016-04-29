@@ -21,6 +21,7 @@ package com.example.tgoetjen.photoalbum;
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     public ArrayList<Album> albums = new ArrayList<Album>();
+    public int numAlbums;
 
     /**
      * User Constructor.
@@ -28,6 +29,10 @@ public class User implements Serializable {
      * @return User
      */
     public User() {
+        numAlbums = 0;
+        albums.add(new Album("Stuff"));
+        Picture p = new Picture("Photo", "Test photo");
+        albums.get(0).addPicture(p);
     }
 
     /**
@@ -37,6 +42,7 @@ public class User implements Serializable {
      */
     public void addAlbum(Album a) {
         albums.add(a);
+        numAlbums++;
     }
 
     /**
@@ -46,5 +52,6 @@ public class User implements Serializable {
      */
     public void removeAlbum(Album a) {
         albums.remove(a);
+        numAlbums--;
     }
 }

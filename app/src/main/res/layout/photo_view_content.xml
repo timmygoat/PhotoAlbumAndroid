@@ -19,12 +19,8 @@
         />
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/photo_listview"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:choiceMode="singleChoice"
-        android:listSelector="#666666" />
-
-    </RelativeLayout>
-
-
+        />
+</RelativeLayout>
