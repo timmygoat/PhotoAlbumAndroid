@@ -31,6 +31,8 @@ public class User implements Serializable {
     public User() {
         numAlbums = 0;
         albums.add(new Album("Stuff"));
+        Picture p = new Picture("Photo", "Test photo", "http");
+        albums.get(0).addPicture(p);
     }
 
     /**

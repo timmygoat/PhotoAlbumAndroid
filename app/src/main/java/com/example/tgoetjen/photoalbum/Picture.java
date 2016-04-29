@@ -43,12 +43,13 @@ public class Picture implements Comparable<Picture>, Serializable{
      * @param caption caption
      * @param URL URL
      */
-    public Picture(String n, String caption, String URL) throws URISyntaxException, IllegalArgumentException{
+    public Picture(String n, String caption, String URL){
+//            throws URISyntaxException, IllegalArgumentException{
         this.name = n;
         this.caption = caption;
         this.date = Calendar.getInstance();
-        File fp = new File(new URI(URL));
-        date.setTimeInMillis(fp.lastModified());
+//        File fp = new File(new URI(URL));
+//        date.setTimeInMillis(fp.lastModified());
         date.set(Calendar.MILLISECOND, 0);
         date.set(Calendar.MINUTE, 0);
         date.set(Calendar.SECOND,0);
